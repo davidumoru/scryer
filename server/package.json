@@ -4,7 +4,7 @@
   "description": "Server files for scryer",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
+    "start": "node app/index.js",
     "test": "jest"
   },
   "repository": {
