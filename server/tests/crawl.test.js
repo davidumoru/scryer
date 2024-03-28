@@ -10,7 +10,7 @@ test("normalizeURL- strip protocol", () => {
 });
 
 test("normalizeURL- strip trailing slash", () => {
-  const input = "example.com/";
+  const input = "https://example.com/";
   const actual = normalizeURL(input);
   const expected = "example.com";
 
@@ -18,7 +18,7 @@ test("normalizeURL- strip trailing slash", () => {
 });
 
 test("normalizeURL- strip capitals", () => {
-  const input = "eXaMplE.cOm";
+  const input = "htpps://eXaMplE.cOm";
   const actual = normalizeURL(input);
   const expected = "example.com";
 
@@ -36,7 +36,7 @@ test("getURLsFromHTML- absolute urls ", () => {
   `;
   const inputBaseURL = "https://example.com";
   const actual = getURLsFromHTML(inputHTMLBody, inputBaseURL);
-  const expected = ["example.com"];
+  const expected = ["https://example.com/"];
 
   expect(actual).toEqual(expected);
 });
@@ -46,13 +46,13 @@ test("getURLsFromHTML- relative urls", () => {
   <html>
     <body>
       <p>Hello, World!</p>
-      <a href="/path/">Example Link</a>
+      <a href="/path">Example Link</a>
     </body>
   </html>
   `;
   const inputBaseURL = "https://example.com";
   const actual = getURLsFromHTML(inputHTMLBody, inputBaseURL);
-  const expected = ["example.com/path"];
+  const expected = ["https://example.com/path"];
 
   expect(actual).toEqual(expected);
 });
@@ -63,13 +63,13 @@ test("getURLsFromHTML- multiple urls", () => {
     <body>
       <p>Hello, World!</p>
       <a href="https://example.com/path1">Example Link</a>
-      <a href="/path2/">Example Link</a>
+      <a href="/path2">Example Link</a>
     </body>
   </html>
   `;
   const inputBaseURL = "https://example.com";
   const actual = getURLsFromHTML(inputHTMLBody, inputBaseURL);
-  const expected = ["example.com/path1", "example.com/path2"];
+  const expected = ["https://example.com/path1", "https://example.com/path2"];
 
   expect(actual).toEqual(expected);
 });
@@ -86,7 +86,7 @@ test("getURLsFromHTML- invalid urls", () => {
   `;
   const inputBaseURL = "https://example.com";
   const actual = getURLsFromHTML(inputHTMLBody, inputBaseURL);
-  const expected = ["example.com/valid"];
+  const expected = ["https://example.com/valid"];
 
   expect(actual).toEqual(expected);
 });

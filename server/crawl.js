@@ -56,17 +56,17 @@ function getURLsFromHTML(htmlBody, baseURL) {
       // relative url
       try {
         const urlObj = new URL(`${baseURL}${linkElement.href}`);
-        urls.push(urlObj.href.toString());
+        urls.push(urlObj.href);
       } catch (err) {
-        console.log(`error with relative url: ${linkElement.href}`);
+        console.log(`error with relative url: ${err.message}`);
       }
     } else {
       // absolute url
       try {
         const urlObj = new URL(linkElement.href);
-        urls.push(urlObj.href.toString());
+        urls.push(urlObj.href);
       } catch (err) {
-        console.log(`error with absolute url: ${linkElement.href}`);
+        console.log(`error with absolute url: ${err.message}`);
       }
     }
   }
@@ -74,7 +74,7 @@ function getURLsFromHTML(htmlBody, baseURL) {
 }
 
 function normalizeURL(url) {
-  const urlObj = new URL(url);
+  const urlObj = new URL(url.toLowerCase());
   const hostPath = `${urlObj.hostname}${urlObj.pathname}`;
   if (hostPath.length > 0 && hostPath.slice(-1) === "/") {
     return hostPath.slice(0, -1);
