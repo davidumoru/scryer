@@ -4,14 +4,14 @@ async function crawlPage(baseURL, currentURL, pages) {
   const baseURLObj = new URL(baseURL);
   const currentURLObj = new URL(currentURL);
   if (currentURLObj.hostname !== baseURLObj.hostname) {
-    console.log(`skipping external link: ${currentURL}`);
+    // console.log(`skipping external link: ${currentURL}`);
     return pages;
   }
 
   const normalizedCurrentURL = normalizeURL(currentURL);
   if (pages[normalizedCurrentURL] > 0) {
     pages[normalizedCurrentURL]++;
-    console.log(`skipping already visited page: ${currentURL}`);
+    // console.log(`skipping already visited page: ${currentURL}`);
     return pages;
   }
 
@@ -31,7 +31,7 @@ async function crawlPage(baseURL, currentURL, pages) {
 
     const contentType = resp.headers.get("content-type");
     if (!contentType || !contentType.includes("text/html")) {
-      console.log(`skipping non-html content-type: ${contentType}`);
+      // console.log(`skipping non-html content-type: ${contentType}`);
       return pages;
     }
 
