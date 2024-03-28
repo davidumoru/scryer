@@ -1,6 +1,22 @@
 const { JSDOM } = require("jsdom");
 
-async function crawlPage(currentURL) {
+async function crawlPage(baseURL, currentURL, pages) {
+  const baseURLObj = new URL(baseURL);
+  const currentURLObj = new URL(currentURL);
+  if (currentURLObj.hostname !== baseURLObj.hostname) {
+    console.log(`skipping external link: ${currentURL}`);
+    return pages;
+  }
+
+  const normalizedCurrentURL = normalizeURL(currentURL);
+  if (pages[normalizedCurrentURL] > 0) {
+    pages[normalizedCurrentURL]++;
+    console.log(`skipping already visited page: ${currentURL}`);
+    return pages;
+  }
+
+  pages[normalizedCurrentURL] = 1;
+
   console.log(`...actively crawling: ${currentURL}`);
 
   try {
@@ -10,16 +26,22 @@ async function crawlPage(currentURL) {
       console.log(
         `error in fetch with status code ${resp.status} on page ${currentURL}`
       );
-      return;
+      return pages;
     }
 
     const contentType = resp.headers.get("content-type");
     if (!contentType || !contentType.includes("text/html")) {
       console.log(`skipping non-html content-type: ${contentType}`);
-      return;
+      return pages;
     }
 
-    console.log(await resp.text());
+    const htmlBody = await resp.text();
+    const urls = getURLsFromHTML(htmlBody, baseURL);
+
+    for (const url of urls) {
+      pages = await crawlPage(baseURL, url, pages);
+    }
+    return pages;
   } catch (err) {
     console.log(`error in fetch--> ${err} on page ${currentURL}`);
   }
@@ -34,7 +56,7 @@ function getURLsFromHTML(htmlBody, baseURL) {
       // relative url
       try {
         const urlObj = new URL(`${baseURL}${linkElement.href}`);
-        urls.push(normalizeURL(urlObj.href));
+        urls.push(urlObj.href.toString());
       } catch (err) {
         console.log(`error with relative url: ${linkElement.href}`);
       }
@@ -42,7 +64,7 @@ function getURLsFromHTML(htmlBody, baseURL) {
       // absolute url
       try {
         const urlObj = new URL(linkElement.href);
-        urls.push(normalizeURL(urlObj.href));
+        urls.push(urlObj.href.toString());
       } catch (err) {
         console.log(`error with absolute url: ${linkElement.href}`);
       }
@@ -52,10 +74,12 @@ function getURLsFromHTML(htmlBody, baseURL) {
 }
 
 function normalizeURL(url) {
-  return url
-    .toLowerCase()
-    .replace(/^https?:\/\//, "")
-    .replace(/\/$/, "");
+  const urlObj = new URL(url);
+  const hostPath = `${urlObj.hostname}${urlObj.pathname}`;
+  if (hostPath.length > 0 && hostPath.slice(-1) === "/") {
+    return hostPath.slice(0, -1);
+  }
+  return hostPath;
 }
 
 module.exports = {
