@@ -1,25 +1,25 @@
-const { normalizeUrl } = require("../crawl");
+const { normalizeURL } = require("../crawl");
 const { test, expect } = require("@jest/globals");
 
-test("normalizeUrl- strip protocol", () => {
+test("normalizeURL- strip protocol", () => {
   const input = "https://example.com";
-  const actual = normalizeUrl(input);
+  const actual = normalizeURL(input);
   const expected = "example.com";
 
   expect(actual).toEqual(expected);
 });
 
-test("normalizeUrl- strip trailing slash", () => {
+test("normalizeURL- strip trailing slash", () => {
   const input = "example.com/";
-  const actual = normalizeUrl(input);
+  const actual = normalizeURL(input);
   const expected = "example.com";
 
   expect(actual).toEqual(expected);
 });
 
-test("normalizeUrl- strip capitals", () => {
+test("normalizeURL- strip capitals", () => {
   const input = "eXaMplE.cOm";
-  const actual = normalizeUrl(input);
+  const actual = normalizeURL(input);
   const expected = "example.com";
 
   expect(actual).toEqual(expected);
