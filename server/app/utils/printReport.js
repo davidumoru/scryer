@@ -19,7 +19,4 @@ function sortPages(pages) {
   return pagesArray;
 }
 
-module.exports = {
-  sortPages,
-  printReport,
-};
+module.exports = { printReport };
