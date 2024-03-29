@@ -1,7 +1,11 @@
 const geminiService = require("../services/gemini.services");
+const { crawlPage } = require("../services/crawl.services");
 
 const analyse = async (req, res) => {
   try {
+    const url = req.body.url;
+    await crawlPage(url, url, {});
+
     const jsonData = await geminiService.analyse();
     res.json(jsonData);
   } catch (error) {
@@ -12,6 +16,9 @@ const analyse = async (req, res) => {
 
 const extract = async (req, res) => {
   try {
+    const url = req.body.url;
+    await crawlPage(url, url, {});
+
     const jsonData = await geminiService.extract();
     res.json(jsonData);
   } catch (error) {
@@ -22,6 +29,9 @@ const extract = async (req, res) => {
 
 const filter = async (req, res) => {
   try {
+    const url = req.body.url;
+    await crawlPage(url, url, {});
+
     const jsonData = await geminiService.filter();
     res.json(jsonData);
   } catch (error) {
@@ -32,6 +42,9 @@ const filter = async (req, res) => {
 
 const summarize = async (req, res) => {
   try {
+    const url = req.body.url;
+    await crawlPage(url, url, {});
+
     const jsonData = await geminiService.summarize();
     res.json(jsonData);
   } catch (error) {
