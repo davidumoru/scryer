@@ -1,15 +1,16 @@
+import { CardTitle, CardDescription, CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 
 export function Signup() {
   return (
-    <div className="mx-auto max-w-sm space-y-6">
-      <div className="space-y-2 text-center">
-        <h1 className="text-3xl font-bold">Sign Up</h1>
-        <p className="text-gray-500 dark:text-gray-400">Enter your information to create an account</p>
-      </div>
-      <div className="space-y-4">
+    <Card>
+      <CardHeader>
+        <CardTitle className="text-2xl">Sign Up</CardTitle>
+        <CardDescription>Enter your information to create an account.</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
             <Label htmlFor="first-name">First name</Label>
@@ -28,10 +29,10 @@ export function Signup() {
           <Label htmlFor="password">Password</Label>
           <Input id="password" required type="password" />
         </div>
-        <Button className="w-full" type="submit">
-          Sign Up
-        </Button>
-      </div>
-    </div>
+      </CardContent>
+      <CardFooter>
+        <Button className="w-full">Sign Up</Button>
+      </CardFooter>
+    </Card>
   )
 }
