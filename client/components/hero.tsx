@@ -1,5 +1,3 @@
-import Link from "next/link";
-
 export function Hero() {
   return (
     <div className="container px-4 md:px-6">
@@ -17,14 +15,6 @@ export function Hero() {
           </p>
         </div>
       </div>
-      <ul>
-        <li>
-          <Link href="/">Home</Link>
-        </li>
-        <li>
-          <Link href="/auth">Auth</Link>
-        </li>
-      </ul>
     </div>
   );
 }
