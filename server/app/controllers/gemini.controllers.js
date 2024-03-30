@@ -1,14 +1,14 @@
 const geminiService = require("../services/gemini.services");
 const { crawlPage } = require("../services/crawl.services");
-const { storeReport } = require("../utils/storeReport");
+const { printReport } = require("../utils/printReport");
 
 const analyse = async (req, res) => {
   try {
     const url = req.body.url;
     pages = await crawlPage(url, url, {});
-    storeReport(pages);
+    const reportData = printReport(pages);
 
-    const jsonData = await geminiService.analyse();
+    const jsonData = await geminiService.analyse(reportData);
     res.json(jsonData);
   } catch (error) {
     console.error(error);
@@ -20,9 +20,9 @@ const extract = async (req, res) => {
   try {
     const url = req.body.url;
     pages = await crawlPage(url, url, {});
-    storeReport(pages);
+    const reportData = printReport(pages);
 
-    const jsonData = await geminiService.extract();
+    const jsonData = await geminiService.extract(reportData);
     res.json(jsonData);
   } catch (error) {
     console.error(error);
@@ -34,9 +34,9 @@ const filter = async (req, res) => {
   try {
     const url = req.body.url;
     pages = await crawlPage(url, url, {});
-    storeReport(pages);
+    const reportData = printReport(pages);
 
-    const jsonData = await geminiService.filter();
+    const jsonData = await geminiService.filter(reportData);
     res.json(jsonData);
   } catch (error) {
     console.error(error);
@@ -48,9 +48,9 @@ const summarize = async (req, res) => {
   try {
     const url = req.body.url;
     pages = await crawlPage(url, url, {});
-    storeReport(pages);
+    const reportData = printReport(pages);
 
-    const jsonData = await geminiService.summarize();
+    const jsonData = await geminiService.summarize(reportData);
     res.json(jsonData);
   } catch (error) {
     console.error(error);
