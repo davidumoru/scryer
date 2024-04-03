@@ -32,10 +32,10 @@ export function Signup() {
       );
 
       console.log("Signup successful:", response.data);
-      toast.success(JSON.stringify(response.data.message, null, 2)); // Show success toast with JSON data
+      toast.success(response.data.message);
     } catch (error: any) {
-      setError(error.response?.data?.message || "Signup failed");
-      toast.error(error.message || "Signup failed");
+      console.error(error);
+      toast.error(error.response.data.message);
     } finally {
       setIsLoading(false);
     }
