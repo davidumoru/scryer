@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, FormEvent } from "react";
+import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { CardTitle, CardDescription, CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card"
@@ -12,6 +13,7 @@ export function Login() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
   const handleLoginSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -29,6 +31,7 @@ export function Login() {
 
       console.log("Login successful:", response.data);
       toast.success(response.data.message);
+      router.push('/dashboard');
     } catch (error: any) {
       console.error(error);
       toast.error(error.response.data.message);
