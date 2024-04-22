@@ -8,6 +8,7 @@ import {
   Card,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Features() {
   return (
@@ -30,7 +31,9 @@ export default function Features() {
               data collection.
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Try it Now</Button>
+              <Button className="w-full">
+                <Link href="dashboard/extract">Try it Now</Link>
+              </Button>
             </CardFooter>
           </Card>
         </div>
@@ -53,7 +56,9 @@ export default function Features() {
               hidden knowledge within your data.
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Try it Now</Button>
+              <Button className="w-full">
+                <Link href="dashboard/analyse">Try it Now</Link>
+              </Button>
             </CardFooter>
           </Card>
         </div>
@@ -76,7 +81,10 @@ export default function Features() {
               understanding.
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Try it Now</Button>
+              <Button className="w-full">
+                <Link href="dashboard/summarize">Try it Now</Link>
+              </Button>
+              \
             </CardFooter>
           </Card>
         </div>
@@ -97,7 +105,9 @@ export default function Features() {
               most.
             </CardContent>
             <CardFooter>
-              <Button className="w-full">Try it Now</Button>
+              <Button className="w-full">
+                <Link href="dashboard/filter">Try it Now</Link>
+              </Button>
             </CardFooter>
           </Card>
         </div>
