@@ -10,7 +10,7 @@ export default function Home() {
       <div className="pt-48 lg:items-center">
         <Hero />
         <div className="m-20">
-          <Link href="/auth">
+          <Link href="/dashboard">
             <Button size="lg" variant="outline">
               Get started
             </Button>
