@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "node app/index.js",
+    "build": "echo 'Starting build process...' && npm install",
     "dev": "nodemon app/index.js",
     "test": "jest"
   },
