@@ -1,12 +1,19 @@
 import axios from "axios";
 import { useState, FormEvent } from "react";
-import { useRouter } from 'next/navigation';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { CardTitle, CardDescription, CardHeader, CardContent, CardFooter, Card } from "@/components/ui/card"
-import { Label } from "@/components/ui/label"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { useRouter } from "next/navigation";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  CardTitle,
+  CardDescription,
+  CardHeader,
+  CardContent,
+  CardFooter,
+  Card,
+} from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export function Login() {
   const [email, setEmail] = useState("");
@@ -21,17 +28,14 @@ export function Login() {
     setError(null);
 
     try {
-      const response = await axios.post(
-        "http://localhost:5006/auth/login",
-        {
-          email,
-          password,
-        }
-      );
+      const response = await axios.post("http://localhost:5006/auth/login", {
+        email,
+        password,
+      });
 
       console.log("Login successful:", response.data);
       toast.success(response.data.message);
-      router.push('/dashboard');
+      router.push("/dashboard");
     } catch (error: any) {
       console.error(error);
       toast.error(error.response.data.message);
@@ -45,25 +49,40 @@ export function Login() {
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
-          <CardDescription>Enter your email below to login to your account.</CardDescription>
+          <CardDescription>
+            Enter your email below to login to your account.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
-            <Input id="email" placeholder="m@example.com" required type="email" onChange={(e) => setEmail(e.target.value)} />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="password">Password</Label>
-            <Input id="password" required type="password" onChange={(e) => setPassword(e.target.value)} />
-          </div>
+          <form onClick={handleLoginSubmit}>
+            <div className="space-y-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                placeholder="m@example.com"
+                required
+                type="email"
+                onChange={(e) => setEmail(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="password">Password</Label>
+              <Input
+                id="password"
+                required
+                type="password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+            <div className="mt-6">
+              <Button className="w-full" disabled={isLoading}>
+                {isLoading ? "Logging In..." : "Sign in"}
+              </Button>
+            </div>
+          </form>
         </CardContent>
-        <CardFooter>
-          <Button className="w-full" disabled={isLoading} onClick={handleLoginSubmit}>
-            {isLoading ? "Logging In..." : "Sign in"}
-          </Button>
-        </CardFooter>
       </Card>
-      <ToastContainer /> 
+      <ToastContainer />
     </div>
   );
 }
