@@ -1,15 +1,15 @@
-function printReport(pages) {
+function printLinkStructure(pages) {
   const sortedPages = sortPages(pages);
-  const reportData = [];
+  const linkStructure = [];
   for (const sortedPage of sortedPages) {
     const url = sortedPage[0];
     const hits = sortedPage[1];
-    reportData.push({ url, hits });
+    linkStructure.push({ url, hits });
   }
   console.log("================");
   console.log("== REPORT GENERATED ====");
   console.log("================");
-  return reportData;
+  return linkStructure;
 }
 
 function sortPages(pages) {
@@ -18,4 +18,4 @@ function sortPages(pages) {
   return pagesArray;
 }
 
-module.exports = { printReport, sortPages };
+module.exports = { printLinkStructure };
