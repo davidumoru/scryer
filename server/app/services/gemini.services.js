@@ -14,7 +14,10 @@ async function generate(webData, linkingStructure) {
   const result = await model.generateContent(prompt);
   const response = await result.response;
   const text = response.text();
-  return { text };
+  return {
+    statusCode: 200,
+    data: { text },
+  };
 }
 
 module.exports = { generate };

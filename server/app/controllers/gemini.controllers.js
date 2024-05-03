@@ -10,9 +10,9 @@ const generate = async (req, res) => {
     const linkingStructure = printLinkStructure(pages);
 
     const webData = await scraperService.scrapePage(url);
-    const result = await geminiService.generate(webData.data, linkingStructure);
+    const data = await geminiService.generate(webData.data, linkingStructure);
 
-    res.status(data.statusCode).json(result);
+    res.status(data.statusCode).json(data);
   } catch (error) {
     console.error(error);
     return res.status(500).json({ message: error.message });
