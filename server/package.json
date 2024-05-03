@@ -44,6 +44,7 @@
     "express": "^4.19.2",
     "jsdom": "^24.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.2.4"
+    "mongoose": "^8.2.4",
+    "puppeteer": "^22.7.1"
   }
 }
