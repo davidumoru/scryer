@@ -16,6 +16,16 @@
       </div>
     </div>
   </div>
+  <div class="footer-buttons">
+    <button>
+      <img src="@/assets/alien_monster.svg" alt="clipboard" /> about
+    </button>
+    <button>
+      <img src="@/assets/sparkling_heart.svg" alt="clipboard" /> donate
+    </button>
+    <button><img src="@/assets/email.svg" alt="clipboard" /> feedback</button>
+    <button><img src="@/assets/gear.svg" alt="clipboard" /> settings</button>
+  </div>
 </template>
 
 <script>
@@ -43,20 +53,20 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: floralwhite;
-  background-color: #010100;
-  height: 100vh;
-  width: 100vw;
 }
 
 body {
   margin: 0;
   padding: 0;
+  height: 100vh;
+  width: 100vw;
 }
 
 * {
   font-family: "Electrolize";
   font-weight: 400;
   font-style: normal;
+  background-color: #010100;
 }
 
 .scryer-container {
@@ -95,10 +105,7 @@ input {
 }
 
 .underline {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  width: 35rem;
   height: 2px;
   background-color: #555;
   transition: background-color 0.3s;
@@ -106,12 +113,17 @@ input {
 input:focus + .underline {
   background-color: #ff9800;
 }
+@media screen and (max-width: 768px) {
+  .underline {
+    width: 100%;
+  }
+}
 
 button {
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  margin-left: 20px;
+  margin-left: 15px;
   border-radius: 10px;
   border: none;
   cursor: pointer;
@@ -133,5 +145,14 @@ img {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
+}
+
+.footer-buttons {
+  display: flex;
+  justify-content: center;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  padding: 30px 0;
 }
 </style>
