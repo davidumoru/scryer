@@ -1,30 +1,31 @@
 <template>
-  <div class="scryer-container">
-    <h1>scryer</h1>
-    <div class="input-container">
-      <div class="link">
-        <img src="@/assets/link.svg" alt="link" />
-        <div class="input-wrapper">
+  <div class="app-wrapper">
+    <div id="message">ui inspired by cobalt.tools</div>
+    <div class="scryer-container">
+      <h1>.scryer</h1>
+      <div class="input-container">
+        <div class="link">
+          <img src="@/assets/link.svg" alt="link" />
           <input v-model="link" placeholder="paste the link here" />
-          <span class="underline"></span>
+        </div>
+        <div class="clipboard">
+          <button @click="pasteLink">
+            <img src="@/assets/clipboard.svg" alt="clipboard" /> paste
+          </button>
         </div>
       </div>
-      <div class="clipboard">
-        <button @click="pasteLink">
-          <img src="@/assets/clipboard.svg" alt="clipboard" /> paste
-        </button>
-      </div>
+      <span class="underline"></span>
     </div>
-  </div>
-  <div class="footer-buttons">
-    <button>
-      <img src="@/assets/alien_monster.svg" alt="clipboard" /> about
-    </button>
-    <button>
-      <img src="@/assets/sparkling_heart.svg" alt="clipboard" /> donate
-    </button>
-    <button><img src="@/assets/email.svg" alt="clipboard" /> feedback</button>
-    <button><img src="@/assets/gear.svg" alt="clipboard" /> settings</button>
+    <div class="footer-buttons">
+      <button>
+        <img src="@/assets/alien_monster.svg" alt="about" /> about
+      </button>
+      <button>
+        <img src="@/assets/sparkling_heart.svg" alt="donate" /> donate
+      </button>
+      <button><img src="@/assets/email.svg" alt="feedback" /> feedback</button>
+      <button><img src="@/assets/gear.svg" alt="settings" /> settings</button>
+    </div>
   </div>
 </template>
 
@@ -69,12 +70,24 @@ body {
   background-color: #010100;
 }
 
+.app-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100vh;
+}
+
+#message {
+  padding: 5px;
+  font-size: 1em;
+  background-color: #0ef64c;
+  color: #181819;
+}
+
 .scryer-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  height: 100vh;
-  justify-content: center;
 }
 
 h1 {
@@ -83,15 +96,9 @@ h1 {
 }
 
 .input-container {
+  width: 40rem;
   display: flex;
-  align-items: center;
-}
-
-.input-wrapper {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: 100%;
+  justify-content: space-between;
 }
 
 input {
@@ -101,31 +108,24 @@ input {
   color: inherit;
   font-size: inherit;
   width: 100%;
-  margin: 0 10px 10px 0;
 }
 
 .underline {
-  width: 35rem;
+  width: 40rem;
   height: 2px;
   background-color: #555;
   transition: background-color 0.3s;
 }
 input:focus + .underline {
-  background-color: #ff9800;
-}
-@media screen and (max-width: 768px) {
-  .underline {
-    width: 100%;
-  }
+  background-color: #0ef64c;
 }
 
 button {
   display: flex;
   align-items: center;
   padding: 10px 20px;
-  margin-left: 15px;
   border-radius: 10px;
-  border: none;
+  border: #555 0.1px solid;
   cursor: pointer;
   background-color: #181819;
   color: floralwhite;
@@ -146,13 +146,30 @@ img {
   align-items: center;
   margin-bottom: 10px;
 }
+.link {
+  width: 80%;
+}
 
 .footer-buttons {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
-  position: fixed;
   bottom: 0;
   width: 100%;
   padding: 30px 0;
+}
+.footer-buttons button {
+  margin: 0 5px;
+}
+@media screen and (max-width: 768px) {
+  .underline {
+    width: 100%;
+  }
+  .input-container {
+    width: 100%;
+  }
+  .footer-buttons button {
+    margin: 5px;
+  }
 }
 </style>
