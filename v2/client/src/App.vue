@@ -170,6 +170,16 @@ img {
   }
   .footer-buttons button {
     margin: 5px;
+    width: 40%;
+  }
+  button {
+    padding: 7px 12px;
+  }
+  img {
+    height: 20px;
+  }
+  .scryer-container {
+    padding: 0 20px;
   }
 }
 </style>
