@@ -30,6 +30,9 @@
 </template>
 
 <script>
+import { inject } from "@vercel/analytics";
+
+inject();
 export default {
   name: "App",
   data() {
