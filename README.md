@@ -2,7 +2,7 @@
 
 # Scryer
 
-#### Gemini Web Data Explorer: Unlock Insights with NLP and Web Scraping
+#### Unlock Insights with NLP and Web Scraping
 
 </div>
 
@@ -10,11 +10,11 @@ This repository contains the code for a web application that leverages the power
 
 ## Project Overview
 
-Manually collecting and analyzing data from websites can be a time-consuming and error-prone process. This project aims to streamline this workflow by offering the following functionalities:
+Collecting and analyzing data from websites can be time-consuming and error-prone. This project aims to streamline this workflow by offering the following functionalities:
 
-- **Targeted Data Extraction:** Automate data collection from websites using web scraping techniques. Define what specific information you need (e.g., product descriptions, pricing data, online reviews) and the system handles the extraction process.
-- **In-Depth Data Analysis:** Gemini goes beyond just collecting data. It utilizes its NLP capabilities to analyze the extracted information, identifying patterns, trends, and sentiment within the text data.
-- **Clear and Concise Insights:** The application translates complex data analysis into clear and actionable reports, empowering you to make informed decisions based on the extracted knowledge.
+- **Data Extraction:** Automate data collection from websites using web scraping techniques.
+- **Data Analysis:** It utilizes its NLP capabilities to analyze the extracted information, identifying patterns, trends, and sentiments within the text data.
+- **Clear and Concise Insights:** The application translates complex data analysis into clear, actionable reports.
 
 ## Getting Started
 
