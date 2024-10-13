@@ -36,8 +36,8 @@
     <!-- Overlay for displaying the response -->
     <div v-if="showOverlay" class="overlay">
       <div class="overlay-content">
-        <h2>Response:</h2>
-        <p>{{ geminiResponse }}</p>
+        <div v-html="formattedGeminiResponse"></div>
+        <!-- Use v-html to render HTML -->
         <button @click="closeOverlay">Close</button>
       </div>
     </div>
@@ -46,7 +46,8 @@
 
 <script>
 import { inject } from "@vercel/analytics";
-import axios from "axios"; // Import Axios for HTTP requests
+import axios from "axios";
+import { marked } from "marked";
 
 inject();
 export default {
@@ -56,6 +57,7 @@ export default {
       link: "",
       showOverlay: false,
       geminiResponse: "",
+      formattedGeminiResponse: "", // New property for formatted response
       isLoading: false, // New loading state
     };
   },
@@ -86,11 +88,15 @@ export default {
         // Extract only the geminiResponse from the full response
         this.geminiResponse = response.data.geminiResponse;
 
-        // Show the overlay with the Gemini response
+        // Format the response from Markdown to HTML
+        this.formattedGeminiResponse = marked(this.geminiResponse);
+
+        // Show the overlay with the formatted Gemini response
         this.showOverlay = true;
       } catch (error) {
         console.error("Error submitting link:", error);
         this.geminiResponse = "An error occurred: " + error.message;
+        this.formattedGeminiResponse = marked(this.geminiResponse); // Ensure error message is formatted
         this.showOverlay = true; // Show the overlay with error message
       } finally {
         this.isLoading = false; // Reset loading state
@@ -99,6 +105,7 @@ export default {
     closeOverlay() {
       this.showOverlay = false; // Close the overlay
       this.geminiResponse = ""; // Clear the response
+      this.formattedGeminiResponse = ""; // Clear formatted response
     },
   },
 };
