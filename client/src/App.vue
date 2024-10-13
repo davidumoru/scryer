@@ -17,11 +17,6 @@
       </div>
       <span class="underline"></span>
     </div>
-    <MyOverlay
-      :isVisible="overlayVisible"
-      :message="overlayMessage"
-      @close="overlayVisible = false"
-    />
     <div class="footer-buttons">
       <button>
         <img src="@/assets/alien_monster.svg" alt="about" /> About
@@ -32,25 +27,30 @@
       <button><img src="@/assets/email.svg" alt="feedback" /> Feedback</button>
       <button><img src="@/assets/gear.svg" alt="settings" /> Settings</button>
     </div>
+
+    <!-- Overlay for displaying the response -->
+    <div v-if="showOverlay" class="overlay">
+      <div class="overlay-content">
+        <h2>Gemini Response</h2>
+        <p>{{ geminiResponse }}</p>
+        <button @click="closeOverlay">Close</button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import { inject } from "@vercel/analytics";
-import axios from "axios";
-import MyOverlay from "./components/Overlay.vue";
+import axios from "axios"; // Import Axios for HTTP requests
 
 inject();
 export default {
   name: "App",
-  components: {
-    MyOverlay,
-  },
   data() {
     return {
       link: "",
-      overlayVisible: false,
-      overlayMessage: "",
+      showOverlay: false,
+      geminiResponse: "",
     };
   },
   methods: {
@@ -68,6 +68,7 @@ export default {
     },
     async submitLink() {
       try {
+        // Send a POST request to your server
         const response = await axios.post(
           "https://scryer-server.vercel.app/api/crawl",
           {
@@ -75,14 +76,23 @@ export default {
           }
         );
 
-        this.overlayMessage = response.data;
-        this.overlayVisible = true;
-        this.link = ""; // Clear input after submission
+        // Extract only the geminiResponse from the full response
+        this.geminiResponse = response.data.geminiResponse;
+
+        // Show the overlay with the Gemini response
+        this.showOverlay = true;
+
+        // Optionally, clear the input after submission
+        this.link = ""; // Reset link after submission
       } catch (error) {
-        this.overlayMessage =
-          error.response?.data?.message || "An error occurred";
-        this.overlayVisible = true;
+        console.error("Error submitting link:", error);
+        this.geminiResponse = "An error occurred: " + error.message;
+        this.showOverlay = true; // Show the overlay with error message
       }
+    },
+    closeOverlay() {
+      this.showOverlay = false; // Close the overlay
+      this.geminiResponse = ""; // Clear the response
     },
   },
 };
@@ -202,6 +212,29 @@ img {
 .footer-buttons button {
   margin: 0 5px;
 }
+
+/* Styles for overlay */
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure overlay is on top */
+}
+
+.overlay-content {
+  background: #181819;
+  padding: 20px;
+  border-radius: 10px;
+  color: floralwhite;
+  text-align: center;
+}
+
 @media screen and (max-width: 768px) {
   .underline {
     width: 100%;
