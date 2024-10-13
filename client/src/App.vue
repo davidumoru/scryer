@@ -1,16 +1,18 @@
 <template>
   <div class="app-wrapper">
-    <div id="message">ui inspired by cobalt.tools</div>
+    <div id="message">UI inspired by cobalt.tools</div>
     <div class="scryer-container">
       <h1>.scryer</h1>
       <div class="input-container">
         <div class="link">
           <img src="@/assets/link.svg" alt="link" />
-          <input v-model="link" placeholder="paste the link here" />
+          <input v-model="link" placeholder="Paste the link here" />
         </div>
         <div class="clipboard">
-          <button @click="pasteLink">
-            <img src="@/assets/clipboard.svg" alt="clipboard" /> paste
+          <button @click="handleButtonClick">
+            <img src="@/assets/clipboard.svg" alt="clipboard" />
+            {{ link ? "Submit" : "Paste" }}
+            <!-- Change button text based on input -->
           </button>
         </div>
       </div>
@@ -18,19 +20,20 @@
     </div>
     <div class="footer-buttons">
       <button>
-        <img src="@/assets/alien_monster.svg" alt="about" /> about
+        <img src="@/assets/alien_monster.svg" alt="about" /> About
       </button>
       <button>
-        <img src="@/assets/sparkling_heart.svg" alt="donate" /> donate
+        <img src="@/assets/sparkling_heart.svg" alt="donate" /> Donate
       </button>
-      <button><img src="@/assets/email.svg" alt="feedback" /> feedback</button>
-      <button><img src="@/assets/gear.svg" alt="settings" /> settings</button>
+      <button><img src="@/assets/email.svg" alt="feedback" /> Feedback</button>
+      <button><img src="@/assets/gear.svg" alt="settings" /> Settings</button>
     </div>
   </div>
 </template>
 
 <script>
 import { inject } from "@vercel/analytics";
+import axios from "axios"; // Import Axios for HTTP requests
 
 inject();
 export default {
@@ -45,6 +48,30 @@ export default {
       navigator.clipboard.readText().then((text) => {
         this.link = text;
       });
+    },
+    handleButtonClick() {
+      if (this.link) {
+        this.submitLink(); // Call your submit logic here
+      } else {
+        this.pasteLink(); // Call the paste logic if link is empty
+      }
+    },
+    async submitLink() {
+      try {
+        // Send a POST request to your server
+        const response = await axios.post(
+          "https://scryer-server.vercel.app/api/crawl",
+          {
+            url: this.link,
+          }
+        );
+        console.log("Response from server:", response.data); // Log the server response
+        // Optionally, clear the input after submission
+        this.link = ""; // Reset link after submission
+      } catch (error) {
+        console.error("Error submitting link:", error); // Log any errors
+        // Optionally, you can show an error message to the user here
+      }
     },
   },
 };
@@ -138,7 +165,7 @@ button:hover {
 }
 
 img {
-  height: 25px;
+  height: 20px;
   width: auto;
   margin-right: 10px;
 }
@@ -177,9 +204,6 @@ img {
   }
   button {
     padding: 7px 12px;
-  }
-  img {
-    height: 20px;
   }
   .scryer-container {
     padding: 0 20px;
