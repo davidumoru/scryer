@@ -12,12 +12,16 @@
           <button @click="handleButtonClick">
             <img src="@/assets/clipboard.svg" alt="clipboard" />
             {{ link ? "Submit" : "Paste" }}
-            <!-- Change button text based on input -->
           </button>
         </div>
       </div>
       <span class="underline"></span>
     </div>
+    <MyOverlay
+      :isVisible="overlayVisible"
+      :message="overlayMessage"
+      @close="overlayVisible = false"
+    />
     <div class="footer-buttons">
       <button>
         <img src="@/assets/alien_monster.svg" alt="about" /> About
@@ -33,14 +37,20 @@
 
 <script>
 import { inject } from "@vercel/analytics";
-import axios from "axios"; // Import Axios for HTTP requests
+import axios from "axios";
+import MyOverlay from "./components/Overlay.vue";
 
 inject();
 export default {
   name: "App",
+  components: {
+    MyOverlay,
+  },
   data() {
     return {
       link: "",
+      overlayVisible: false,
+      overlayMessage: "",
     };
   },
   methods: {
@@ -51,26 +61,27 @@ export default {
     },
     handleButtonClick() {
       if (this.link) {
-        this.submitLink(); // Call your submit logic here
+        this.submitLink();
       } else {
-        this.pasteLink(); // Call the paste logic if link is empty
+        this.pasteLink();
       }
     },
     async submitLink() {
       try {
-        // Send a POST request to your server
         const response = await axios.post(
           "https://scryer-server.vercel.app/api/crawl",
           {
             url: this.link,
           }
         );
-        console.log("Response from server:", response.data); // Log the server response
-        // Optionally, clear the input after submission
-        this.link = ""; // Reset link after submission
+
+        this.overlayMessage = response.data;
+        this.overlayVisible = true;
+        this.link = ""; // Clear input after submission
       } catch (error) {
-        console.error("Error submitting link:", error); // Log any errors
-        // Optionally, you can show an error message to the user here
+        this.overlayMessage =
+          error.response?.data?.message || "An error occurred";
+        this.overlayVisible = true;
       }
     },
   },
