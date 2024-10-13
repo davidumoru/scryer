@@ -1,41 +1,89 @@
-<div align = "center">
-
 # Scryer
 
-#### Gemini Web Data Explorer: Unlock Insights with NLP and Web Scraping
+This project is a Node.js-based web crawler and scraper that extracts internal links and relevant text content from a specified URL. The extracted data is then sent to Gemini AI for analysis.
 
-</div>
+## Table of Contents
 
-This repository contains the code for a web application that leverages the power of Gemini, a large language model from Google AI, combined with web scraping techniques to unlock valuable insights from web data.
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Setup Instructions](#setup-instructions)
+- [Usage](#usage)
+- [API Endpoints](#api-endpoints)
+- [License](#license)
 
-## Project Overview
+## Features
 
-Manually collecting and analyzing data from websites can be a time-consuming and error-prone process. This project aims to streamline this workflow by offering the following functionalities:
+- Crawl a given website to extract internal links.
+- Scrape title, headings, and body text content.
+- Send extracted data to the Gemini AI for analysis.
 
-- **Targeted Data Extraction:** Automate data collection from websites using web scraping techniques. Define what specific information you need (e.g., product descriptions, pricing data, online reviews) and the system handles the extraction process.
-- **In-Depth Data Analysis:** Gemini goes beyond just collecting data. It utilizes its NLP capabilities to analyze the extracted information, identifying patterns, trends, and sentiment within the text data.
-- **Clear and Concise Insights:** The application translates complex data analysis into clear and actionable reports, empowering you to make informed decisions based on the extracted knowledge.
+## Technologies Used
 
-## Getting Started
+- Node.js
+- Axios (for making HTTP requests)
+- Cheerio (for parsing and manipulating HTML)
+- Google Generative AI (Gemini AI integration)
 
-This project is currently under development. I'll be adding instructions on how to set up and run the application soon.
+## Setup Instructions
 
-## Features (In Development)
+1. **Clone the repository:**
 
-- Data collection from websites.
-- Functionality to define specific data extraction criteria through a user interface.
-- NLP analysis of extracted data using Gemini.
-- Report generation with key findings and insights.
-- Interactive visualizations (planned future development).
+   ```bash
+   git clone https://github.com/davidumoru/scryer.git
+   cd scryer/server
+   ```
 
-## Contributing
+2. **Install dependencies:**
 
-Contributions to this project are welcome! If you're interested in helping out, feel free to fork the repository and submit a pull request.
+   Make sure you have Node.js installed, then run:
 
-# Team
+   ```bash
+   npm install
+   ```
 
-- [David Umoru](https://github.com/davidumoru)
+3. **Configure environment variables:**
 
-# License
+   Create a `.env` file in the root directory and add your Gemini API key:
 
-This project is licensed under the MIT License (see [LICENSE]() for details).
+   ```plaintext
+   GEMINI_API_KEY=your_api_key_here
+   ```
+
+4. **Run the application locally:**
+
+   You can test your application locally using:
+
+   ```bash
+   npm start
+   ```
+
+## Usage
+
+To use the web crawler and scraper, send a POST request to the API endpoint `/api/crawl` with a JSON body containing the URL you want to crawl:
+
+```json
+{
+    "url": "https://davidumoru.me"
+}
+```
+
+## API Endpoints
+
+- **POST `/api/crawl`**
+
+  - **Description:** Crawls the specified URL and scrapes the internal links and text content.
+  - **Request Body:**
+
+    ```json
+    {
+      "url": "https://davidumoru.me"
+    }
+    ```
+
+  - **Response:**
+    - Success: Returns a JSON object with the results.
+    - Error: Returns an error message if the operation fails.
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
