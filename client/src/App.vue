@@ -28,10 +28,15 @@
       <button><img src="@/assets/gear.svg" alt="settings" /> Settings</button>
     </div>
 
+    <!-- Loading Overlay -->
+    <div v-if="isLoading" class="loading-overlay">
+      <div class="loading-content">Processing...</div>
+    </div>
+
     <!-- Overlay for displaying the response -->
     <div v-if="showOverlay" class="overlay">
       <div class="overlay-content">
-        <h2>Gemini Response</h2>
+        <h2>Response:</h2>
         <p>{{ geminiResponse }}</p>
         <button @click="closeOverlay">Close</button>
       </div>
@@ -51,6 +56,7 @@ export default {
       link: "",
       showOverlay: false,
       geminiResponse: "",
+      isLoading: false, // New loading state
     };
   },
   methods: {
@@ -67,6 +73,7 @@ export default {
       }
     },
     async submitLink() {
+      this.isLoading = true; // Set loading to true
       try {
         // Send a POST request to your server
         const response = await axios.post(
@@ -81,13 +88,12 @@ export default {
 
         // Show the overlay with the Gemini response
         this.showOverlay = true;
-
-        // Optionally, clear the input after submission
-        this.link = ""; // Reset link after submission
       } catch (error) {
         console.error("Error submitting link:", error);
         this.geminiResponse = "An error occurred: " + error.message;
         this.showOverlay = true; // Show the overlay with error message
+      } finally {
+        this.isLoading = false; // Reset loading state
       }
     },
     closeOverlay() {
@@ -211,6 +217,25 @@ img {
 }
 .footer-buttons button {
   margin: 0 5px;
+}
+
+/* Styles for loading overlay */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999; /* Ensure loading overlay is on top */
+}
+
+.loading-content {
+  color: floralwhite;
+  font-size: 1.5em;
 }
 
 /* Styles for overlay */
