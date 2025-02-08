@@ -1,4 +1,3 @@
-import React from 'react';
 import { Brain } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import { LinkAnalysis } from './LinkAnalysis';

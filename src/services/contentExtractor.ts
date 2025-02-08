@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { ExtractedContent } from "../types";
+
 export async function extractContent(url: string): Promise<ExtractedContent> {
   try {
     const response = await fetch(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);

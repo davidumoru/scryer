@@ -1,4 +1,3 @@
-import React from 'react';
 import { BarChart as BarChartIcon, ExternalLink } from 'lucide-react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
