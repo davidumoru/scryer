@@ -40,7 +40,7 @@ function App() {
         <div className="max-w-7xl mx-auto px-4 py-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2">
             <Globe className="w-8 h-8 text-blue-500" />
-            <h1 className="text-2xl font-bold text-gray-900">URL Content Analyzer</h1>
+            <h1 className="text-2xl font-bold text-gray-900">Scryer</h1>
           </div>
         </div>
       </header>
