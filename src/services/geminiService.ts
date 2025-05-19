@@ -5,7 +5,7 @@ const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY);
 
 export async function analyzeContent(content: string, sourceUrl: string): Promise<string> {
   try {
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+    const model = genAI.getGenerativeModel({ model: 'gemini-1.0-pro' });
     
     const prompt = `
       You will be provided with content from a primary web page and several pages linked from it.

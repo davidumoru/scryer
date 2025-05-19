@@ -31,7 +31,7 @@ describe('geminiService', () => {
 
     const result = await analyzeContent(content, sourceUrl);
 
-    expect(mockGetGenerativeModel).toHaveBeenCalledWith({ model: 'gemini-pro' });
+    expect(mockGetGenerativeModel).toHaveBeenCalledWith({ model: 'gemini-1.0-pro' });
     expect(mockGenerateContent).toHaveBeenCalledTimes(1);
     
     const calledPrompt = mockGenerateContent.mock.calls[0][0] as string;
