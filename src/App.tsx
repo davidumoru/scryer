@@ -1,35 +1,109 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState } from 'react';
 import { Globe, Search, AlertCircle, Brain } from 'lucide-react';
-import { extractContent } from './services/contentExtractor';
+import { extractContent, extractMultipleContents } from './services/contentExtractor'; // Updated import
 import { analyzeContent } from './services/geminiService';
 import { AnalysisReport } from './components/AnalysisReport';
+import { ExtractedContent } from './types'; // Import ExtractedContent type
 
 function App() {
   const [url, setUrl] = useState('');
   const [analysis, setAnalysis] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingMessage, setLoadingMessage] = useState(''); // New state for loading messages
   const [error, setError] = useState('');
+  const [extractionError, setExtractionError] = useState('');
+  const [analysisError, setAnalysisError] = useState('');
   const [links, setLinks] = useState<string[]>([]);
+  // New state for secondary page contents
+  const [secondaryPageContents, setSecondaryPageContents] = useState<Record<string, ExtractedContent | { error: string }>>({});
 
   const handleAnalyze = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setLoadingMessage('Starting analysis...');
     setError('');
+    setExtractionError('');
+    setAnalysisError('');
     setAnalysis('');
     setLinks([]);
+    setSecondaryPageContents({});
+
+    // URL Validation
+    try {
+      new URL(url);
+    } catch (_) {
+      setError('Please enter a valid URL (e.g., http://example.com)');
+      setLoading(false);
+      setLoadingMessage('');
+      return;
+    }
 
     try {
-      const content = await extractContent(url);
-      setLinks(content.links);
-      const analysisResult = await analyzeContent(
-        `Title: ${content.title}\n\nContent: ${content.text}\n\nInternal Links: ${content.links.join('\n')}`
-      );
+      // Step 1: Extract Initial Content
+      setLoadingMessage('Extracting content from the primary URL...');
+      const initialContent = await extractContent(url);
+      setLinks(initialContent.links);
+
+      // Step 2: Extract Content from Internal Links
+      let extractedSecondaryContents: Record<string, ExtractedContent | { error: string }> = {};
+      if (initialContent.links && initialContent.links.length > 0) {
+        setLoadingMessage(`Extracting content from ${initialContent.links.length} linked page(s)...`);
+        extractedSecondaryContents = await extractMultipleContents(initialContent.links);
+        setSecondaryPageContents(extractedSecondaryContents);
+        // Check if all secondary extractions failed
+        const allFailed = Object.values(extractedSecondaryContents).every(res => 'error' in res);
+        if (allFailed && initialContent.links.length > 0) {
+            setExtractionError(`Failed to extract content from any of the ${initialContent.links.length} linked pages. Analysis will proceed with primary page content only.`);
+            // Do not return, proceed with primary content
+        }
+      }
+      
+      // Step 3: Prepare Combined Content for AI
+      setLoadingMessage('Preparing combined content for AI analysis...');
+      let combinedContentString = `Primary Page Content (URL: ${url}):\nTitle: ${initialContent.title}\nContent: ${initialContent.text}\n---\n`;
+
+      if (initialContent.links && initialContent.links.length > 0) {
+        combinedContentString += "Linked Page Content:\n";
+        for (const linkUrl of initialContent.links) {
+          const contentOrError = extractedSecondaryContents[linkUrl];
+          if (contentOrError) {
+            if ('error' in contentOrError) {
+              combinedContentString += `URL: ${linkUrl}\nError: Failed to extract content - ${contentOrError.error}\n---\n`;
+            } else {
+              combinedContentString += `URL: ${linkUrl}\nTitle: ${contentOrError.title}\nContent: ${contentOrError.text}\n---\n`;
+            }
+          } else {
+            combinedContentString += `URL: ${linkUrl}\nError: Content not found or extraction skipped.\n---\n`;
+          }
+        }
+      }
+      combinedContentString += `Overall Internal Links Found on Primary Page:\n${initialContent.links.join('\n')}`;
+
+      // Step 4: Call AI Service
+      setLoadingMessage('Analyzing all content with AI...');
+      const analysisResult = await analyzeContent(combinedContentString, url);
       setAnalysis(analysisResult);
-    } catch (err) {
-      setError('Failed to analyze the URL. Please check the URL and try again.');
+
+    } catch (err) { // This catch block now primarily handles errors from initial extractContent or unexpected issues
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const message = err instanceof Error ? (err as any).message : String(err);
+      // Errors from extractMultipleContents are handled above and stored in secondaryPageContents
+      // Errors from analyzeContent are caught in its own try...catch if we were to add one, or here if not.
+      // For simplicity, we'll assume analyzeContent throws and gets caught here if not handled by its own specific error state.
+      if (message.includes('API key not valid')) {
+        setAnalysisError('AI analysis failed: Invalid API key.');
+      } else if (message.includes('Gemini API')) { // Generic Gemini error from service
+        setAnalysisError(message);
+      } else if (message.includes('Failed to fetch from proxy') || message.includes('Proxy returned empty') || message.includes('Failed to parse HTML content') || message.includes('Content extraction failed')) {
+        setExtractionError(message); // Error from initial content extraction
+      }
+      else {
+        setError(`An unexpected error occurred: ${message}`);
+      }
     } finally {
       setLoading(false);
+      setLoadingMessage('');
     }
   };
 
@@ -74,7 +148,7 @@ function App() {
               disabled={loading}
               className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
             >
-              {loading ? 'Analyzing...' : 'Analyze Content'}
+              {loading ? loadingMessage || 'Analyzing...' : 'Analyze Content'}
             </button>
           </form>
 
@@ -84,6 +158,26 @@ function App() {
                 <AlertCircle className="h-5 w-5 text-red-400" />
                 <div className="ml-3">
                   <h3 className="text-sm font-medium text-red-800">{error}</h3>
+                </div>
+              </div>
+            </div>
+          )}
+          {extractionError && (
+            <div className="mt-4 p-4 bg-red-50 rounded-md">
+              <div className="flex">
+                <AlertCircle className="h-5 w-5 text-red-400" />
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">{extractionError}</h3>
+                </div>
+              </div>
+            </div>
+          )}
+          {analysisError && (
+            <div className="mt-4 p-4 bg-red-50 rounded-md">
+              <div className="flex">
+                <AlertCircle className="h-5 w-5 text-red-400" />
+                <div className="ml-3">
+                  <h3 className="text-sm font-medium text-red-800">{analysisError}</h3>
                 </div>
               </div>
             </div>
